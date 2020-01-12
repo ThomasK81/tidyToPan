@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/233335696.svg)](https://zenodo.org/badge/latestdoi/233335696)
+
 # tidyToPān 1.0.0 "Account of Monte Cristo"
 
 tidyToPān 1.0.0 is a trimmed down version of <a href="https://zenodo.org/record/1289084#.XhqUty17Hys" target="_blank">(Meletē)ToPān v.0.5</a>. I wrote (Meletē)ToPān v.0.5 with Ancient languages in mind. In tidyToPān I have simplified the user interface, so that it is easier to use for other languages too. I also made sure that there are fewer dependencies: for instance, I am not expecting the data to be in a specific citation format and one has to install fewer external libraries to make tidyToPān work. Additionally, I have updated the source code, so it incorporates recent advances of the 'tidyverse' package. 
