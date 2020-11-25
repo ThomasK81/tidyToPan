@@ -1,9 +1,9 @@
 # exclude everything
-www/*
-!www/*/
+www/corpora
+www/models
+www/stopwords
 
 # exception to the rule
-!www/melete.png
 !www/corpora/.gitkeep
 !www/models/.gitkeep
 !www/stopwords/.gitkeep
@@ -14,3 +14,4 @@ Thumbs.db
 .RData
 .RHistory
 ToPan.log
+.Rproj.user
