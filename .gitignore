@@ -1,8 +1,10 @@
 # exclude everything
-www
+www/corpora
+www/models
+www/stopwords
+rsconnect
 
 # exception to the rule
-!www/melete.png
 !www/corpora/.gitkeep
 !www/models/.gitkeep
 !www/stopwords/.gitkeep

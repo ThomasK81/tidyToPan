@@ -1,0 +1,79 @@
+---
+title: "Topic Modelling Visualisation Example"
+output: html_notebook
+---
+
+This is a visualisation example for [tidyToPān](https://doi.org/10.5281/zenodo.3605354). After we have produced a topic model in tidyToPān for the `testdata/RScripts_TopicModelling_TEDonly_final.csv` data, we can load the data into R likes this:
+
+```{r}
+library(tidyverse)
+theta <- read_csv("www/models/TEDTalkCTM/20201126-1044/tab/theta.csv") %>%
+  select(-X1,-text) %>%
+  rename(Talk_ID = identifier)
+theta
+```
+
+We also want additional metadata from the sample data set, so we import that data too:
+
+```{r}
+metadata <- read_csv("testdata/RScripts_TopicModelling_TEDonly_final.csv") %>%
+  select(Talk_ID,event,duration,published,views) 
+metadata
+```
+
+And then combine them:
+
+```{r}
+fusionedData <- inner_join(metadata, theta)
+fusionedData
+```
+
+Now we want to make the data longer to visualise it easier accross variables in our metadata:
+
+```{r}
+longfusionedData <- fusionedData %>% pivot_longer(6:ncol(fusionedData), names_to = "Topic", values_to = "theta")
+longfusionedData
+```
+Finally, we can start visualising the topics for instance the topic `feel_children_social_experience_happiness_lives_course` and `dollars_country_million_countries_money_africa_billion` across time:
+
+```{r}
+library(ggthemes)
+library(lubridate)
+selection <- c("feel_children_social_experience_happiness_lives_course","dollars_country_million_countries_money_africa_billion")
+longfusionedData %>%
+  filter(Topic %in% selection) %>%
+  filter(theta > .1) %>%
+  mutate(Date = mdy(published)) %>%
+  ggplot(aes(Date, theta, fill = Topic)) +
+  geom_col(position = "dodge2") +
+  scale_fill_fivethirtyeight() +
+  theme_wsj() +
+  coord_cartesian(ylim = c(0,1))
+  
+```
+
+Or all topics in April 2010:
+```{r}
+longfusionedData %>%
+  filter(theta > .1) %>%
+  mutate(Date = mdy(published)) %>%
+  filter(year(Date) == 2010) %>%
+  filter(month(Date) == 4) %>%
+  ggplot(aes(Date, theta, fill = Topic)) +
+  geom_col() +
+  theme_fivethirtyeight()
+```
+
+
+Or which topics were most talked about
+```{r}
+longfusionedData %>%
+  mutate(talkedAbout = map2_dbl(duration, theta, function(x,y){(period_to_seconds(hms(x)) * y) / 60})) %>%
+  group_by(Topic) %>%
+  summarise(`Topics talked about (weighted min)` = sum(talkedAbout, na.rm = T)) %>%
+  ggplot() +
+  geom_col(aes(Topic, `Topics talked about (weighted min)`, fill = Topic), show.legend = F) +
+  theme_tufte() +
+  scale_fill_hue() +
+  coord_flip()
+```
