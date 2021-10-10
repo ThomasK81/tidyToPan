@@ -1,6 +1,5 @@
 # exclude everything
-www/*
-!www/*/
+www
 
 # exception to the rule
 !www/melete.png
@@ -14,3 +13,4 @@ Thumbs.db
 .RData
 .RHistory
 ToPan.log
+.Rproj.user
